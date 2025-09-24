@@ -165,3 +165,30 @@ class Agent:
     
     self.visited.add(current_pos)
 
+    def find_path_to(self, start, target):
+        if target not in self.memory:
+            return None
+        
+        queue = deque ([(start, [])])
+        visited = {start}
+
+        while queue:
+            current_pos, path = queue.popleft()
+
+            if current_pos == target:
+                return path
+            
+            moves = {'N': (-1, 0), 'S': (1, 0), 'L': (0, 1), 'O': (0, -1)}
+            for direction, (dy,dx) in moves.itens():
+                new_pos = (current_pos[0] + dy, current_pos[1] + dx)
+
+                if (new_pos not in visited and 
+                    new_pos in self.memory and 
+                    self.memory[new_pos]!= 'X'):
+                    visited.add(new_pos)
+                    queue.append((new_pos, path + [direction]))
+                
+                return None
+            
+
+
