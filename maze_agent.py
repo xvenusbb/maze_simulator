@@ -189,6 +189,7 @@ class Agent:
                     queue.append((new_pos, path + [direction]))
                 
                 return None
-            
+            def choose_next_action (self, current_pos, sensor_data):
+                self.update_memory(sensor_data, current_pos)
 
-
+                if self.collected_food >= self.total and self.exit_location
