@@ -189,7 +189,91 @@ class Agent:
                     queue.append((new_pos, path + [direction]))
                 
                 return None
+            
             def choose_next_action (self, current_pos, sensor_data):
                 self.update_memory(sensor_data, current_pos)
 
-                if self.collected_food >= self.total and self.exit_location
+                if self.collected_food >= self.total and self.exit_location:
+                    path = self.find_path_to(current_pos, self.exit_location)
+                    if path:
+                        return path [0]
+                        
+                    if self.food_locations:
+                        food_list = list(self.food_locations)
+                        food_list.sort(key=lambda x: abs(x[0] - current_pos[0] + abs(x[1] - current_pos[1])))
+
+                        for food_pos in food_list:
+                            path = self.find_path_to(current_pos, food_pos)
+                            if path:
+                                return path[0]
+                
+            moves = {'N': (-1, 0), 'S': (1, 0), 'L': (0, 1), 'O': (0, -1)}
+        unvisited_moves = []
+        valid_moves = []
+
+        for direction, (dy,dx) in moves.items():
+            new_pos = (current_pos[0] + dy, current_pos[1] + dx)
+
+            if new_pos in self.memory and self.memory[new_pos] != 'X':
+                valid_moves.append(direction)
+                if new_pos not in self.visited:
+                    unvisited_moves.append(direction)
+
+            
+            if unvisited_moves:
+                return random.choice(unvisited_moves)
+            elif valid_moves:
+                return random.choice(valid_moves)
+            
+            if len(self.path_history) > 1:
+                last_pos = self. path_history[-2]
+                for direction, (dx,dy) in moves.items():
+                    if (current_pos[0] + dy, current_pos[1]) == last_pos:
+                         return direction
+                    
+            
+            return random.choice(['N', 'S', 'L', 'O'])
+
+
+    def create_sample_maze():
+        maze_content = """XXXXXXXXXXXXX
+XE__________X
+X_XXXXX_XXX_X
+X_____X_____X
+XXXX_XX_XXXXX
+X_o_____o___X
+X_X_XXXXX_X_X
+X___X___X___X
+XXX_X_o_X_XXX
+X_______X___X
+X_XXXXXXX_X_X
+X_________o_X
+X_XXXXX_XXX_X
+X______S____X
+XXXXXXXXXXXXX"""
+    with open ('maze.txt', 'w') as f:
+        f.write(maze_content)
+        print("Arquivo maze.txt criado com labirinto de exemplo!")
+
+
+    def main():
+        print("=== AGENTE AUTÔNOMO PARA LABIRINTO ===\n")
+
+        if not os.path.exists('maze.txt'):
+            create_sample_maze()
+        
+        env = Environment('maze.txt')
+        if env.maze is None:
+            print('Erro: Não foi possível carregar o labirinto. Tente novamente.')
+            return
+        
+    print(f"Labirinto carregado: {len(env.maze)}x{len(env.maze[0])}")
+    print(f"Comidas no labirinto: {env.food_count}")
+    print(f"Posição inicial do agente: {env.agent_pos}")
+    print("\nLabirinto inicial:")
+    env.print_maze()
+
+    Agent = Agent(env.food_count)
+    max_steps = 1000
+    step = 0
+    
