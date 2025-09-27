@@ -276,4 +276,61 @@ XXXXXXXXXXXXX"""
     Agent = Agent(env.food_count)
     max_steps = 1000
     step = 0
+
+    while step < max_steps:
+        current_pos = env.agent_pos
+        
+        # Coleta comida se estiver em uma célula com comida
+        if env.collect_food():
+            agent.collected_food += 1
+            agent.food_locations.discard(current_pos)
+            print(f"Comida coletada! Total: {agent.collected_food}/{agent.total_food}")
+        
+        # Verifica se chegou na saída
+        if env.is_exit() and agent.collected_food >= agent.total_food:
+            print("Agente chegou na saída com todas as comidas!")
+            break
+        
+        # Obtém dados do sensor
+        sensor_data = env.get_sensor(current_pos, env.agent_direction)
+        
+        # Agente escolhe próxima ação
+        next_direction = agent.choose_next_action(current_pos, sensor_data)
+        
+        # Executa movimento
+        env.set_direction(next_direction)
+        if env.move():
+            agent.path_history.append(current_pos)
+            print(f"Passo {step + 1}: Moveu para {next_direction}, Posição: {env.agent_pos}")
+        else:
+            print(f"Passo {step + 1}: Movimento {next_direction} inválido!")
+        
+        step += 1
+        
+        # Mostra progresso a cada 10 passos
+        if step % 10 == 0:
+            print(f"\nProgresso - Passos: {step}, Comidas: {agent.collected_food}/{agent.total_food}")
+            env.print_maze()
     
+    # Calcula pontuação final
+        food_points = agent.collected_food * 10
+        step_penalty = env.steps * 1
+        total_score = food_points - step_penalty
+    
+        print("\n" + "="*50)
+        print("RESULTADO FINAL")
+        print("="*50)
+        print(f"Comidas coletadas: {agent.collected_food}/{agent.total_food}")
+        print(f"Total de passos: {env.steps}")
+        print(f"Pontos por comida: {food_points} pts")
+        print(f"Penalidade por passos: -{step_penalty} pts")
+        print(f"Pontuação final: {total_score} pts")
+        
+        if agent.collected_food >= agent.total_food and env.is_exit():
+            print("Status: Missão completa!")
+        else:
+            print("STATUS: Missão incompleta")
+    
+        print("\nLabirinto final:")
+        env.print_maze()
+
