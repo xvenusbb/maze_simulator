@@ -2,10 +2,9 @@ import copy
 import time
 import argparse
 
-# ...demais definições de classes e funções...
 
 def simular_labirinto(agente, ambiente, setas):
-    # Backups do estado
+ 
     pos_backup = agente.pos
     dir_backup = agente.direcao
     passo_backup = agente.passo
@@ -16,7 +15,7 @@ def simular_labirinto(agente, ambiente, setas):
     posicoes_comidas_backup = copy.deepcopy(ambiente.posicoes_comidas)
     try:
         while True:
-            # Cria grid visual
+           
             grid_vis = copy.deepcopy(ambiente.grid)
             for pos in ambiente.posicoes_comidas:
                 grid_vis[pos[0]][pos[1]] = 'o'
@@ -29,7 +28,7 @@ def simular_labirinto(agente, ambiente, setas):
                 print(''.join(row))
             print(f"Passo: {agente.passo}, Comidas: {agente.comidas_coletadas}/{agente.total_comidas}, "
                   f"Recompensa: {agente.recompensa_total}, Dir: {agente.direcao}")
-            # Executa ação
+         
             acao = agente.decidir_acao()
             if acao == 'move':
                 agente.move()
@@ -38,7 +37,7 @@ def simular_labirinto(agente, ambiente, setas):
     except KeyboardInterrupt:
         print("\nAnimação interrompida.")
     finally:
-        # Restaura estado da simulação principal
+       
         agente.pos = pos_backup
         agente.direcao = dir_backup
         agente.passo = passo_backup
@@ -52,5 +51,5 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Simulador de Agente em Labirinto")
     parser.add_argument("--arquivo", required=True,
                         help="Caminho para o arquivo TXT do labirinto")
-    # ...restante do código principal...
+ 
    
