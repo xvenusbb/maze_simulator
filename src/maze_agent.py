@@ -3,6 +3,8 @@ import os
 import random
 import time
 from collections import deque
+import cv2
+import numpy as np
 
 # --- CONFIGURAÇÃO ---
 NOME_ARQUIVO_PADRAO = "maze.txt"
@@ -78,29 +80,21 @@ class Ambiente:
                     else:
                         sensor[i][j] = self.labirinto[linha][coluna]
 
-        # O centro (1,1) é a posição do agente no sensor
-        # O agente não precisa do seu próprio conteúdo, ele usa a direção, mas vamos manter o '_' ou 'o'
-        # O código original usava a direção, mas isso não é o conteúdo do mapa:
-        # sensor[1][1] = self.direcao_agente 
-        
-        # Deixamos o agente no centro como a direção para a lógica dele
+       
         sensor[1][1] = self.direcao_agente
 
         return sensor
 
     def definir_direcao(self, direcao):
-        """Define direção do agente"""
+      
         self.direcao_agente = direcao
 
     def mover(self):
-        """
-        Move agente na direção atual.
-        Retorna (moveu_sucesso, coletou_comida)
-        """
+  
         nova_linha = self.linha_agente
         nova_coluna = self.coluna_agente
 
-        # Calcula nova posição baseada na direção
+     
         if self.direcao_agente == 'N':
             nova_linha -= 1
         elif self.direcao_agente == 'S':
@@ -148,7 +142,7 @@ class Ambiente:
         return self.total_comida
 
     def obter_comida_restante(self):
-        """Obtém contagem de comida restante"""
+
         return self.comida_restante
 
     def imprimir_labirinto(self):
@@ -470,3 +464,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
