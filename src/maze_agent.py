@@ -167,6 +167,15 @@ class Ambiente:
         # O '\n' extra do código original: print(flush=True)
         print(flush=True)
 
+def obter_sensor_comida(self):
+    """Retorna uma lista com as coordenadas de todas as comidas restantes."""
+    comidas = []
+    for i in range(self.linhas):
+        for j in range(self.colunas):
+            if self.labirinto[i][j] == 'o':
+                comidas.append((i, j))
+    return comidas
+
 
 class Agente:
     def __init__(self, ambiente, comida_esperada):
