@@ -123,7 +123,7 @@ def criar_labirinto_exemplo():
 XE_o__o_X
 X_XXXX_oX
 X_o__o_XX
-XXX_X_o_X
+X0_X_X_o_X
 X_o___X_X
 X_XXX_X_X
 X_o__o_oS
